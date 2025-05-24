@@ -10,15 +10,15 @@ import { UpdatesAccount } from "./schema.ts";
 export const APPLICATION_NAME = "Standup";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <JazzProvider
-      sync={{
-        peer: `wss://cloud.jazz.tools/?key=${apiKey}`,
-      }}
-      AccountSchema={UpdatesAccount}
-    >
-      <App />
-      <JazzInspector />
-    </JazzProvider>
-  </StrictMode>
+	<StrictMode>
+		<JazzProvider
+			sync={{
+				peer: `wss://cloud.jazz.tools/?key=${apiKey}`,
+			}}
+			AccountSchema={UpdatesAccount}
+		>
+			<App />
+			<JazzInspector />
+		</JazzProvider>
+	</StrictMode>,
 );
