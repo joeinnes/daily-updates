@@ -114,10 +114,9 @@ export function AddUpdate() {
     me.root.draft = DraftUpdate.create({
       update: co.plainText().create(""),
       details: co.richText().create(""),
-      area: undefined,
-      date: undefined,
       type: "update",
     });
+
     setNewUpdate(me.root.draft);
     setthisDate(undefined);
   };

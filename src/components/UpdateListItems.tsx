@@ -216,12 +216,6 @@ export function DaySection({
     setIsEditDialogOpen(true);
   };
 
-  const handleDeleteUpdate = () => {
-    // The actual deletion logic is handled in the parent component
-    // This is just a placeholder for now
-    setIsEditDialogOpen(false);
-  };
-
   return (
     <div key={dayKey}>
       <div
@@ -253,7 +247,6 @@ export function DaySection({
           update={selectedUpdate}
           isOpen={isEditDialogOpen}
           onOpenChange={setIsEditDialogOpen}
-          onDelete={handleDeleteUpdate}
         />
       )}
       <div className="mt-2 space-y-3 pl-4 border-l-2 border-gray-200 ml-1 grid gap-2 grid-cols-[max-content_1fr]">
@@ -265,11 +258,9 @@ export function DaySection({
                   <Badge
                     style={{
                       backgroundColor: update.area.color ?? "#000000",
-                      color: `contrast-color(${
-                        update.area.color ?? "#000000"
-                      })`,
+                      color: contrastColor(update.area.color ?? "#000000"),
                     }}
-                    className="mt-1 self-start"
+                    className="mt-1 self-start w-full"
                   >
                     {update.area.name}
                   </Badge>
@@ -283,7 +274,7 @@ export function DaySection({
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <p>{update.update}</p>
+                  <p className="text-sm">{update.update}</p>
                   {update.details && (
                     <div
                       className="text-sm text-muted-foreground prose prose-sm max-w-none"
@@ -326,4 +317,55 @@ export function DaySection({
       </div>
     </div>
   );
+}
+
+function contrastColor(color: string) {
+  let r, g, b;
+
+  if (typeof color !== "string") return "black";
+
+  // Remove leading/trailing whitespace
+  color = color.trim();
+
+  // HEX format
+  if (color.startsWith("#")) {
+    color = color.slice(1);
+
+    if (color.length === 3) {
+      color = color
+        .split("")
+        .map((c) => c + c)
+        .join("");
+    }
+
+    if (color.length === 6) {
+      r = parseInt(color.slice(0, 2), 16);
+      g = parseInt(color.slice(2, 4), 16);
+      b = parseInt(color.slice(4, 6), 16);
+    } else {
+      // Invalid hex fallback
+      return "black";
+    }
+  }
+
+  // RGB / RGBA format
+  else if (color.startsWith("rgb")) {
+    const matches = color.match(/rgba?\(([^)]+)\)/);
+    if (matches) {
+      const [rStr, gStr, bStr] = matches[1]
+        .split(",")
+        .map((v) => parseInt(v.trim(), 10));
+      r = rStr;
+      g = gStr;
+      b = bStr;
+    } else {
+      return "black";
+    }
+  } else {
+    return "black"; // fallback if unknown format
+  }
+
+  // YIQ brightness formula
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "black" : "white";
 }

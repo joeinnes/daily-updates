@@ -58,8 +58,6 @@ export function EditUpdate({
 
   useEffect(() => {
     if (!update) return;
-
-    // Clone the update for editing
     setEditedUpdate(update);
     setDate(update.date);
   }, [update, isOpen]);
@@ -77,13 +75,18 @@ export function EditUpdate({
     }
 
     // Close the dialog
-    onOpenChange(false);
   };
 
   const handleDelete = () => {
     if (onDelete) {
       onDelete();
+      onOpenChange(false);
+      return;
     }
+    me.root.updates?.splice(
+      me.root.updates.findIndex((u) => u?.id === editedUpdate.id),
+      1
+    );
     onOpenChange(false);
   };
 

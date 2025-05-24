@@ -36,7 +36,7 @@ function App() {
           <div className="bg-primary text-primary-foreground size-11 font-bold rounded-lg text-3xl grid place-items-center">
             S
           </div>
-          <div className="gap-2 items-center">
+          <div className="flex gap-2 items-center">
             {!isAuthenticated && (
               <span className="hidden md:flex">
                 Authenticate to share the data with another device.
