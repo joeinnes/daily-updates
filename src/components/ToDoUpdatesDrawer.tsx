@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { Badge } from "./ui/badge";
 import {
   Sheet,
@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useAccount } from "jazz-react";
 import { UpdatesAccount, type UpdateItem } from "@/schema";
 import { EditUpdate } from "./EditUpdate";
+import { cn } from "@/lib/utils";
 
 export function ToDoUpdatesDrawer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,19 +57,19 @@ export function ToDoUpdatesDrawer() {
   return (
     <>
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button variant="outline" className="relative">
-            <ClipboardList className="h-5 w-5" />
-            <span className="ml-2">To Do</span>
-            {todoUpdates.length > 0 && (
-              <Badge
-                variant="destructive"
-                className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center"
-              >
-                {todoUpdates.length}
-              </Badge>
-            )}
-          </Button>
+        <SheetTrigger
+          className={cn(buttonVariants({ variant: "outline" }), "relative")}
+        >
+          <ClipboardList className="h-5 w-5" />
+          <span className="ml-2">To Do</span>
+          {todoUpdates.length > 0 && (
+            <Badge
+              variant="destructive"
+              className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center"
+            >
+              {todoUpdates.length}
+            </Badge>
+          )}
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>

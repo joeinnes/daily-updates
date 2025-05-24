@@ -129,11 +129,11 @@ export function AddUpdate() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center mb-4">
+        <div className="flex items-center mb-4 flex-wrap md:flex-nowrap">
           <Checkbox
             id="completed"
             checked={thisDate !== undefined}
-            className="me-2"
+            className="me-2 hidden md:block"
           />
           <AreaSelect
             areas={areas}
@@ -141,18 +141,19 @@ export function AddUpdate() {
               newUpdate.area = areas.find((area) => area?.id === val);
             }}
             value={newUpdate?.area?.id}
+            className="md:rounded-r-none md:border-r-0"
           />
           <Input
             type="text"
             placeholder="What have you been up to?"
             value={newUpdate?.update?.valueOf()}
             onChange={(e) => newUpdate.update?.applyDiff(e.target.value)}
-            className="rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="text-sm md:rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 my-2 md:my-0"
           />
           <DatePicker
             date={thisDate}
             onSelect={setthisDate}
-            className="border-l-0 rounded-l-none"
+            className="md:border-l-0 md:rounded-l-none"
           />
           <Button className="ms-2" onClick={handleSave}>
             Save
@@ -191,14 +192,21 @@ function AreaSelect({
   areas,
   updateArea,
   value,
+  className,
 }: {
   areas: any[];
   updateArea: (val: string) => void;
   value: string | undefined;
+  className?: string;
 }) {
   return (
     <Select onValueChange={updateArea} value={value ?? ""}>
-      <SelectTrigger className="rounded-r-none border-r-0 focus-visible:ring-0 focus-visible:ring-offset-0 w-[120px]">
+      <SelectTrigger
+        className={cn(
+          "focus-visible:ring-0 focus-visible:ring-offset-0 w-[120px]",
+          className
+        )}
+      >
         <SelectValue placeholder="Area" />
       </SelectTrigger>
       <SelectContent>

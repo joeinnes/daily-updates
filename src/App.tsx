@@ -32,20 +32,21 @@ function App() {
   return (
     <>
       <header>
-        <nav className="mx-auto max-w-4xl flex justify-between items-center py-3">
+        <nav className="mx-auto max-w-4xl flex justify-between items-center p-3">
           <div className="bg-primary text-primary-foreground size-11 font-bold rounded-lg text-3xl grid place-items-center">
             S
           </div>
-          <div className="flex gap-2 items-center">
-             
+          <div className="gap-2 items-center">
             {!isAuthenticated && (
-              <span>Authenticate to share the data with another device.</span>
+              <span className="hidden md:flex">
+                Authenticate to share the data with another device.
+              </span>
             )}{" "}
             <AuthButton />
           </div>
         </nav>
       </header>
-      <main className="mx-auto max-w-4xl mt-16 flex flex-col gap-8">
+      <main className="mx-auto max-w-4xl mt-16 flex flex-col gap-8 p-3">
         <AddUpdate />
         <UpdateList />
       </main>
