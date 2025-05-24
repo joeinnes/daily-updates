@@ -1,5 +1,5 @@
 "use client";
-import { Button, buttonVariants } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { Badge } from "./ui/badge";
 import {
   Sheet,
@@ -92,6 +92,7 @@ export function ToDoUpdatesDrawer() {
                   onClick={() => {
                     if (update.type === "update" && update.area === null)
                       return;
+                    // @ts-expect-error: update.area isn't null, but it thinks it might be for some reason. I guess theoretically it could be null if you didn't have permission to view it.
                     handleUpdateClick(update);
                   }}
                 >

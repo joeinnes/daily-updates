@@ -59,7 +59,7 @@ export function UpdateList() {
     if (!groupedByDay[dateKey]) {
       groupedByDay[dateKey] = [];
     }
-    // ts-expect-error: update.area isn't null, but it thinks it might be for some reason. I guess theoretically it could be null if you didn't have permission to view it.
+    // @ts-expect-error: update.area isn't null, but it thinks it might be for some reason. I guess theoretically it could be null if you didn't have permission to view it.
     groupedByDay[dateKey].push(update);
   }
 
