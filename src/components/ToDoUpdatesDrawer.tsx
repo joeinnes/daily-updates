@@ -92,6 +92,7 @@ export function ToDoUpdatesDrawer() {
                   onClick={() => {
                     if (update.type === "update" && update.area === null)
                       return;
+                    // @ts-expect-error
                     handleUpdateClick(update);
                   }}
                 >
