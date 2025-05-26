@@ -80,7 +80,6 @@ export function AddUpdate() {
         type: "update",
       });
     }
-
     setNewUpdate(me.root.draft);
   }, [me?.root]);
 
@@ -118,7 +117,7 @@ export function AddUpdate() {
       type: "update",
     });
 
-    setNewUpdate(me.root.draft);
+    setNewUpdate(me.root.draft); // Try commenting out this line
     setthisDate(undefined);
   };
   return (
@@ -129,10 +128,7 @@ export function AddUpdate() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div
-          className="flex items-center mb-4 flex-wrap md:flex-nowrap"
-          key={newUpdate.id}
-        >
+        <div className="flex items-center mb-4 flex-wrap md:flex-nowrap">
           <Checkbox
             id="completed"
             checked={thisDate !== undefined}
@@ -162,7 +158,7 @@ export function AddUpdate() {
             Save
           </Button>
         </div>
-        <Collapsible onOpenChange={setDetailsExpanded} key={newUpdate.id}>
+        <Collapsible onOpenChange={setDetailsExpanded}>
           <CollapsibleTrigger className="w-full text-sm flex justify-between font-semibold ">
             <p>Add Details</p>
             <span
