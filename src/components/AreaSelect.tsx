@@ -11,6 +11,7 @@ import {
 import { Area } from "@/schema"; // Changed from 'import type { Area as AreaType }'
 import { type Loaded } from "jazz-tools"; // Added import for Loaded
 import { AddArea } from "./AddArea";
+import { useState } from "react";
 
 type AreaType = Loaded<typeof Area> | null; // Added type definition for AreaType
 
@@ -27,10 +28,21 @@ export function AreaSelect({
   value,
   className,
 }: AreaSelectProps) {
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   const selectedArea = areas.find((area) => area?.id === value);
 
+  const handleAreaAdded = (areaId: string) => {
+    updateArea(areaId);
+    setIsSelectOpen(false);
+  };
+
   return (
-    <Select onValueChange={updateArea} value={value ?? ""}>
+    <Select
+      onValueChange={updateArea}
+      value={value ?? ""}
+      open={isSelectOpen}
+      onOpenChange={setIsSelectOpen}
+    >
       <SelectTrigger
         className={cn(
           "focus-visible:ring-0 focus-visible:ring-offset-0",
@@ -77,7 +89,7 @@ export function AreaSelect({
           </SelectItem>
         )}
         <div className="mt-2">
-          <AddArea />
+          <AddArea setArea={handleAreaAdded} />
         </div>
       </SelectContent>
     </Select>

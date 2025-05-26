@@ -17,9 +17,13 @@ import {
 import { ColorPicker } from "./ColorPicker";
 import { useAccount } from "jazz-react";
 import { Area, UpdatesAccount } from "@/schema";
-import { co } from "jazz-tools";
+import { co, ID } from "jazz-tools";
 
-export function AddArea() {
+export function AddArea({
+  setArea,
+}: {
+  setArea: (area: ID<typeof Area>) => void;
+}) {
   const [name, setName] = useState<string | null>(null);
   const [color, setColor] = useState<string>("#000000");
   const [open, setOpen] = useState(false);
@@ -35,6 +39,7 @@ export function AddArea() {
       color: color,
     });
     me.root.areas?.push(area);
+    setArea(area.id);
     setName(null);
     setColor("#000000");
     setOpen(false);

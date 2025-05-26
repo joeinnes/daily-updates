@@ -23,7 +23,7 @@ import { DraftUpdate, type Update, UpdatesAccount } from "@/schema";
 import { useAccount } from "jazz-react";
 import { type Loaded, co } from "jazz-tools";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react"; // Added useRef
 import { AreaSelect } from "./AreaSelect";
 import { DatePicker } from "./DatePicker";
 import { AddMusic } from "./AddMusic";
@@ -32,6 +32,7 @@ export function AddUpdate() {
   const [thisDate, setthisDate] = useState<Date | undefined>(undefined);
   const [detailsExpanded, setDetailsExpanded] = useState<boolean>(false);
   const [newUpdate, setNewUpdate] = useState<any>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { me } = useAccount(UpdatesAccount, {
     resolve: {
@@ -60,6 +61,12 @@ export function AddUpdate() {
   if (!me?.root || !newUpdate) return null;
 
   const areas = me?.root?.areas || [];
+
+  const updateArea = (val: string) => {
+    if (!newUpdate) return;
+    newUpdate.area = me?.root?.areas?.find((area) => area?.id === val);
+    inputRef.current?.focus();
+  };
 
   const handleSave = () => {
     if (!newUpdate) return;
@@ -110,9 +117,7 @@ export function AddUpdate() {
           />
           <AreaSelect
             areas={areas}
-            updateArea={(val: string) => {
-              newUpdate.area = areas.find((area) => area?.id === val);
-            }}
+            updateArea={updateArea}
             value={newUpdate?.area?.id}
             className="md:rounded-r-none md:border-r-0"
           />
@@ -122,6 +127,7 @@ export function AddUpdate() {
             value={newUpdate?.update?.valueOf()}
             onChange={(e) => newUpdate.update?.applyDiff(e.target.value)}
             className="text-sm md:rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 my-2 md:my-0"
+            ref={inputRef}
           />
           <DatePicker
             date={thisDate}

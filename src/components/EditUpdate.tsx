@@ -1,6 +1,5 @@
 "use client";
 import { Editor } from "@/components/Editor.tsx";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogClose,
@@ -10,21 +9,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
 import { Button, buttonVariants } from "./ui/button";
+import { AreaSelect } from "./AreaSelect";
+import { DatePicker } from "./DatePicker";
 
 import { type UpdateItem, UpdatesAccount } from "@/schema";
 
@@ -92,7 +81,7 @@ export function EditUpdate({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange} key={update.id}>
-      <DialogContent className="">
+      <DialogContent className="max-w-full ">
         <DialogHeader>
           <DialogTitle>
             {editedUpdate.type === "update" ? "Edit Update" : "Edit Music"}
@@ -100,7 +89,7 @@ export function EditUpdate({
         </DialogHeader>
 
         {editedUpdate.type === "update" ? (
-          <div className="grid gap-4 py-4 grid-cols-1 md:grid-cols-none">
+          <div className="grid gap-4 py-4 grid-cols-1 md:grid-cols-none ">
             <div className="flex items-center gap-2">
               <AreaSelect
                 areas={areas}
@@ -108,8 +97,9 @@ export function EditUpdate({
                   editedUpdate.area = areas.find((area) => area?.id === val);
                 }}
                 value={editedUpdate?.area?.id}
+                className="flex-1"
               />
-              <DatePicker date={date} onSelect={setDate} />
+              <DatePicker date={date} onSelect={setDate} className="flex-1" />
             </div>
 
             <div className="grid gap-2">
@@ -118,7 +108,7 @@ export function EditUpdate({
                 placeholder="What have you been up to?"
                 value={editedUpdate?.update?.valueOf()}
                 onChange={(e) => editedUpdate.update?.applyDiff(e.target.value)}
-                className="text-sm"
+                className="text-sm break-all"
               />
 
               <Input
@@ -126,7 +116,7 @@ export function EditUpdate({
                 placeholder="Link"
                 value={editedUpdate?.link?.valueOf()}
                 onChange={(e) => (editedUpdate.link = e.target.value)}
-                className="text-sm"
+                className="text-sm break-all"
               />
 
               {editedUpdate.details && <Editor value={editedUpdate.details} />}
@@ -139,7 +129,7 @@ export function EditUpdate({
               placeholder="Track name"
               value={editedUpdate?.name?.valueOf()}
               onChange={(e) => editedUpdate.name?.applyDiff(e.target.value)}
-              className="text-sm"
+              className="text-sm break-all"
             />
 
             <Input
@@ -147,7 +137,7 @@ export function EditUpdate({
               placeholder="Link"
               value={editedUpdate?.link}
               onChange={(e) => (editedUpdate.link = e.target.value)}
-              className="text-sm"
+              className="text-sm break-all"
             />
 
             <DatePicker date={date} onSelect={setDate} />
@@ -171,89 +161,5 @@ export function EditUpdate({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function AreaSelect({
-  areas,
-  updateArea,
-  value,
-}: {
-  areas: any[];
-  updateArea: (val: string) => void;
-  value: string | undefined;
-}) {
-  return (
-    <Select onValueChange={updateArea} value={value ?? ""}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Area" />
-      </SelectTrigger>
-      <SelectContent>
-        {areas.length ? (
-          areas.map((area) => {
-            return area ? (
-              <SelectItem value={area.id} key={area.id}>
-                <>
-                  <div
-                    className="w-4 h-4 rounded inline-block"
-                    style={{
-                      backgroundColor: area?.color,
-                    }}
-                  ></div>
-                  {area?.name}
-                </>
-              </SelectItem>
-            ) : null;
-          })
-        ) : (
-          <SelectItem value="no" disabled={true} key="no">
-            No areas found
-          </SelectItem>
-        )}
-      </SelectContent>
-    </Select>
-  );
-}
-
-function DatePicker({
-  date,
-  onSelect,
-  className,
-}: {
-  date: Date | undefined;
-  onSelect: (newDate: Date | undefined) => void;
-  className?: string;
-}) {
-  return (
-    <Popover>
-      <PopoverTrigger
-        className={cn(
-          buttonVariants({
-            variant: "outline",
-          }),
-          "w-[180px] justify-start text-left font-normal",
-          !date && "text-muted-foreground",
-          className
-        )}
-      >
-        <CalendarIcon className="mr-2 h-4 w-4" />
-        {date ? date.toLocaleDateString("en-GB") : <span>Pick a date</span>}
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={onSelect}
-          initialFocus
-        />
-        <Button
-          variant={"outline"}
-          className="w-full mt-2"
-          onClick={() => onSelect(undefined)}
-        >
-          Clear
-        </Button>
-      </PopoverContent>
-    </Popover>
   );
 }
