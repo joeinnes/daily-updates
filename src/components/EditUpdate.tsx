@@ -74,7 +74,7 @@ export function EditUpdate({
       editedUpdate.date = date;
     }
 
-    // Close the dialog
+    onOpenChange(false);
   };
 
   const handleDelete = () => {

@@ -201,30 +201,47 @@ function AreaSelect({
   value: string | undefined;
   className?: string;
 }) {
+  const selectedArea = areas.find((area) => area?.id === value);
+
   return (
     <Select onValueChange={updateArea} value={value ?? ""}>
       <SelectTrigger
         className={cn(
-          "focus-visible:ring-0 focus-visible:ring-offset-0 w-[120px]",
+          "focus-visible:ring-0 focus-visible:ring-offset-0",
+          "flex items-center justify-between w-[120px] flex-shrink-0",
           className
         )}
       >
-        <SelectValue placeholder="Area" />
+        {selectedArea ? (
+          <>
+            <div className="flex items-center overflow-hidden w-full">
+              <div
+                className="w-4 h-4 rounded inline-block me-2 flex-shrink-0"
+                style={{
+                  backgroundColor: selectedArea.color,
+                }}
+              ></div>
+              <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
+                {selectedArea.name?.valueOf()}
+              </span>
+            </div>
+          </>
+        ) : (
+          <SelectValue placeholder="Area" />
+        )}
       </SelectTrigger>
       <SelectContent>
         {areas.length ? (
           areas.map((area) => {
             return area ? (
               <SelectItem value={area.id} key={area.id}>
-                <>
-                  <div
-                    className="w-4 h-4 rounded inline-block"
-                    style={{
-                      backgroundColor: area?.color,
-                    }}
-                  ></div>
-                  {area?.name}
-                </>
+                <div
+                  className="w-4 h-4 rounded inline-block"
+                  style={{
+                    backgroundColor: area?.color,
+                  }}
+                ></div>
+                {area?.name?.valueOf()}
               </SelectItem>
             ) : null;
           })
@@ -374,7 +391,7 @@ function AddMusic() {
 
         <Input
           type="text"
-          placeholder="Track name"
+          placeholder="Label (e.g. 'Artist—Album')"
           onChange={(e) => setName(e.target.value)}
           className="flex-1 bg-transparent rounded-md px-3 py-2 text-sm placeholder:text-muted-foreground h-10"
           required
