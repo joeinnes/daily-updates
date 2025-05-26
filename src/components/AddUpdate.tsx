@@ -1,6 +1,5 @@
 "use client";
 import { Editor } from "@/components/Editor.tsx";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
   CardContent,
@@ -14,45 +13,20 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "./ui/button";
 
-import {
-  Area,
-  DraftUpdate,
-  MusicUpdate,
-  type Update,
-  UpdatesAccount,
-} from "@/schema";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+
+import { DraftUpdate, type Update, UpdatesAccount } from "@/schema";
 
 import { useAccount } from "jazz-react";
 import { type Loaded, co } from "jazz-tools";
 
-import { CalendarIcon, Music, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { ColorPicker } from "./ColorPicker";
+import { AreaSelect } from "./AreaSelect";
+import { DatePicker } from "./DatePicker";
+import { AddMusic } from "./AddMusic";
 
 export function AddUpdate() {
   const [thisDate, setthisDate] = useState<Date | undefined>(undefined);
@@ -187,233 +161,5 @@ export function AddUpdate() {
       </CardContent>
       <CardFooter></CardFooter>
     </Card>
-  );
-}
-
-function AreaSelect({
-  areas,
-  updateArea,
-  value,
-  className,
-}: {
-  areas: any[];
-  updateArea: (val: string) => void;
-  value: string | undefined;
-  className?: string;
-}) {
-  const selectedArea = areas.find((area) => area?.id === value);
-
-  return (
-    <Select onValueChange={updateArea} value={value ?? ""}>
-      <SelectTrigger
-        className={cn(
-          "focus-visible:ring-0 focus-visible:ring-offset-0",
-          "flex items-center justify-between w-[120px] flex-shrink-0",
-          className
-        )}
-      >
-        {selectedArea ? (
-          <>
-            <div className="flex items-center overflow-hidden w-full">
-              <div
-                className="w-4 h-4 rounded inline-block me-2 flex-shrink-0"
-                style={{
-                  backgroundColor: selectedArea.color,
-                }}
-              ></div>
-              <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
-                {selectedArea.name?.valueOf()}
-              </span>
-            </div>
-          </>
-        ) : (
-          <SelectValue placeholder="Area" />
-        )}
-      </SelectTrigger>
-      <SelectContent>
-        {areas.length ? (
-          areas.map((area) => {
-            return area ? (
-              <SelectItem value={area.id} key={area.id}>
-                <div
-                  className="w-4 h-4 rounded inline-block"
-                  style={{
-                    backgroundColor: area?.color,
-                  }}
-                ></div>
-                {area?.name?.valueOf()}
-              </SelectItem>
-            ) : null;
-          })
-        ) : (
-          <SelectItem value="no" disabled={true} key="no">
-            No areas found
-          </SelectItem>
-        )}
-        <div className="mt-2">
-          <AddArea />
-        </div>
-      </SelectContent>
-    </Select>
-  );
-}
-
-function DatePicker({
-  date,
-  onSelect,
-  className,
-}: {
-  date: Date | undefined;
-  onSelect: (newDate: Date | undefined) => void;
-  className?: string;
-}) {
-  return (
-    <Popover>
-      <PopoverTrigger
-        className={cn(
-          buttonVariants({
-            variant: "outline",
-          }),
-          "w-[130px] justify-start text-left font-normal ",
-          !date && "text-muted-foreground",
-          className
-        )}
-      >
-        <CalendarIcon />
-        {date ? date.toLocaleDateString("en-GB") : <span>Pick a date</span>}
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={onSelect}
-          initialFocus
-        />
-        <Button
-          variant={"outline"}
-          className="w-full mt-2"
-          onClick={() => onSelect(undefined)}
-        >
-          Clear
-        </Button>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-function AddArea() {
-  const [name, setName] = useState<string | null>(null);
-  const [color, setColor] = useState<string>("#000000");
-
-  const { me } = useAccount(UpdatesAccount, {
-    resolve: { root: true },
-  });
-  const onSave = () => {
-    if (!me || !name) return;
-    const area = Area.create({
-      name: co.plainText().create(name),
-      color: color,
-    });
-    me.root.areas?.push(area);
-  };
-  return (
-    <Dialog>
-      <DialogTrigger
-        className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
-      >
-        <Plus />
-        Add an area
-      </DialogTrigger>
-      <DialogContent aria-describedby="Area addition">
-        <DialogHeader>
-          <DialogTitle>Add an area</DialogTitle>
-        </DialogHeader>
-        <div className="flex items-stretch group rounded-md border border-input focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-background focus-within:border-ring transition-all duration-150 ease-in-out">
-          <Input
-            type="text"
-            placeholder="Area name"
-            onChange={(e) => setName(e.target.value)}
-            className="flex-1 bg-transparent rounded-l-md rounded-r-none border-0 px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-0 h-10"
-          />
-          <ColorPicker
-            onChange={setColor}
-            value={color}
-            className={cn(
-              "rounded-l-none rounded-r-md border-0 border-l border-input px-3 py-2 focus:outline-none focus:ring-0 h-10",
-              "group-focus-within:border-l-ring transition-all duration-150 ease-in-out"
-            )}
-          />
-        </div>
-        <DialogFooter>
-          <DialogClose className={cn(buttonVariants({ variant: "outline" }))}>
-            Cancel
-          </DialogClose>
-          <Button onClick={onSave}>Add</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function AddMusic() {
-  const [name, setName] = useState<string | null>(null);
-  const [link, setLink] = useState<string | null>(null);
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [open, setOpen] = useState(false);
-  const { me } = useAccount(UpdatesAccount, {
-    resolve: { root: true },
-  });
-
-  const onSave = () => {
-    if (!me || !link || !date || !name) return;
-    const music = MusicUpdate.create({
-      name: co.plainText().create(name),
-      link,
-      date,
-      type: "music",
-    });
-    me.root.updates?.push(music);
-    setName(null);
-    setLink(null);
-    setDate(undefined);
-    setOpen(false);
-  };
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      {" "}
-      <DialogTrigger className={cn(buttonVariants({ variant: "secondary" }))}>
-        <Music />
-      </DialogTrigger>
-      <DialogContent aria-describedby="Music addition">
-        <DialogHeader>
-          <DialogTitle>Add some music</DialogTitle>
-        </DialogHeader>
-
-        <Input
-          type="text"
-          placeholder="Label (e.g. 'Artist—Album')"
-          onChange={(e) => setName(e.target.value)}
-          className="flex-1 bg-transparent rounded-md px-3 py-2 text-sm placeholder:text-muted-foreground h-10"
-          required
-        />
-
-        <Input
-          type="text"
-          placeholder="Link"
-          onChange={(e) => setLink(e.target.value)}
-          className="flex-1 bg-transparent rounded-md px-3 py-2 text-sm placeholder:text-muted-foreground h-10"
-          required
-        />
-
-        <DatePicker date={date} onSelect={setDate} />
-
-        <DialogFooter>
-          <DialogClose className={cn(buttonVariants({ variant: "outline" }))}>
-            Cancel
-          </DialogClose>
-          <Button onClick={onSave}>Add</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }
