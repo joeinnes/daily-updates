@@ -91,7 +91,7 @@ export function EditUpdate({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange} key={update.id}>
       <DialogContent className="">
         <DialogHeader>
           <DialogTitle>

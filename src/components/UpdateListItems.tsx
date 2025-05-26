@@ -250,12 +250,12 @@ export function DaySection({
           onOpenChange={setIsEditDialogOpen}
         />
       )}
-      <div className="mt-2 space-y-3 pl-4 border-l-2 border-gray-200 ml-1 grid gap-2 grid-cols-[max-content_1fr] wrap-anywhere">
+      <div className="mt-2 space-y-3 pl-4 border-l-2 border-gray-200 md:ml-1 grid gap-2 grid-cols-[max-content_1fr] wrap-anywhere items-start md:items-center">
         {dayUpdates.map((update) => (
           <div className="contents" key={update.id}>
             {update.type === "update" && update.area && (
               <>
-                <div className="md:writing-horizontal writing-vertical-lr transform rotate-180">
+                <div className="md:writing-horizontal writing-vertical-lr transform rotate-180 text-center">
                   <Badge
                     style={{
                       backgroundColor: update.area.color ?? "#000000",
@@ -267,15 +267,22 @@ export function DaySection({
                   </Badge>
                 </div>
                 <div className="flex flex-col justify-center group relative">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 md:opacity-0 group-hover:opacity-100 transition-opacity "
-                    onClick={(e) => handleEditClick(update, e)}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <p className="text-sm">{update.update}</p>
+                  <p className="text-sm">
+                    {update.update}{" "}
+                    {update.link && (
+                      <a href={update.link} target="_blank" rel="noreferrer">
+                        🔗
+                      </a>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="md:absolute md:right-0 md:top-0 md:opacity-0 group-hover:opacity-100 transition-opacity "
+                      onClick={(e) => handleEditClick(update, e)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                  </p>
                   {update.details && (
                     <div
                       className="text-sm text-muted-foreground prose prose-sm max-w-none"
@@ -296,7 +303,7 @@ export function DaySection({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="md:absolute md:right-0 md:top-0 opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={(e) => handleEditClick(update, e)}
                   >
                     <Pencil className="h-4 w-4" />

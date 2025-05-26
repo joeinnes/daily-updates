@@ -114,6 +114,7 @@ export function AddUpdate() {
     me.root.draft = DraftUpdate.create({
       update: co.plainText().create(""),
       details: co.richText().create(""),
+      link: "",
       type: "update",
     });
 
@@ -128,7 +129,10 @@ export function AddUpdate() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center mb-4 flex-wrap md:flex-nowrap">
+        <div
+          className="flex items-center mb-4 flex-wrap md:flex-nowrap"
+          key={newUpdate.id}
+        >
           <Checkbox
             id="completed"
             checked={thisDate !== undefined}
@@ -158,7 +162,7 @@ export function AddUpdate() {
             Save
           </Button>
         </div>
-        <Collapsible onOpenChange={setDetailsExpanded}>
+        <Collapsible onOpenChange={setDetailsExpanded} key={newUpdate.id}>
           <CollapsibleTrigger className="w-full text-sm flex justify-between font-semibold ">
             <p>Add Details</p>
             <span
@@ -174,8 +178,8 @@ export function AddUpdate() {
             <Input
               type="text"
               placeholder="Link"
-              value={newUpdate?.link?.valueOf()}
-              onChange={(e) => newUpdate.link?.applyDiff(e.target.value)}
+              value={newUpdate?.link}
+              onChange={(e) => (newUpdate.link = e.target.value)}
               className="text-sm"
             />
 
