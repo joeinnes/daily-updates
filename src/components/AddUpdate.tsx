@@ -346,6 +346,7 @@ function AddMusic() {
   const [name, setName] = useState<string | null>(null);
   const [link, setLink] = useState<string | null>(null);
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const [open, setOpen] = useState(false);
   const { me } = useAccount(UpdatesAccount, {
     resolve: { root: true },
   });
@@ -359,9 +360,14 @@ function AddMusic() {
       type: "music",
     });
     me.root.updates?.push(music);
+    setName(null);
+    setLink(null);
+    setDate(undefined);
+    setOpen(false);
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
+      {" "}
       <DialogTrigger className={cn(buttonVariants({ variant: "secondary" }))}>
         <Music />
       </DialogTrigger>
