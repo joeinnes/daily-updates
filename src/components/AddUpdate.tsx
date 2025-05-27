@@ -65,7 +65,9 @@ export function AddUpdate() {
   const updateArea = (val: string) => {
     if (!newUpdate) return;
     newUpdate.area = me?.root?.areas?.find((area) => area?.id === val);
-    inputRef.current?.focus();
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0); // Delay focus to ensure input is ready
   };
 
   const handleSave = () => {
