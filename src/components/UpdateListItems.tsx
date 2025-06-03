@@ -143,9 +143,8 @@ export function WeekSection({
   return (
     <div
       id={weekId}
-      className={`mt-6 mb-3 pb-1 flex justify-between items-center ${
-        isFirstInMonth ? "" : "pt-2 border-t border-border"
-      }`}
+      className={`mt-6 mb-3 pb-1 flex justify-between items-center ${isFirstInMonth ? "" : "pt-2 border-t border-border"
+        }`}
     >
       <h3 className="text-xl font-semibold text-muted-foreground">
         Week of{" "}
@@ -221,9 +220,8 @@ export function DaySection({
     <div key={dayKey}>
       <div
         id={dayId}
-        className={`mt-4 flex justify-between items-center ${
-          isFirstInWeekOrMonth ? "" : "pt-2 border-t border-border"
-        }`}
+        className={`mt-4 flex justify-between items-center ${isFirstInWeekOrMonth ? "" : "pt-2 border-t border-border"
+          }`}
       >
         <h4 className="text-lg font-medium text-foreground">
           {currentDayDate.toLocaleDateString(undefined, {
@@ -250,7 +248,7 @@ export function DaySection({
           onOpenChange={setIsEditDialogOpen}
         />
       )}
-      <div className="mt-2 space-y-3 pl-4 border-l-2 border-gray-200 md:ml-1 grid gap-2 grid-cols-[max-content_1fr] wrap-anywhere items-start md:items-center">
+      <div className="mt-2 space-y-3 pl-4 border-l-2 border-gray-200 md:ml-1 grid gap-2 grid-cols-[max-content_1fr] wrap-anywhere items-start">
         {dayUpdates.map((update) => (
           <div className="contents" key={update.id}>
             {update.type === "update" && update.area && (
@@ -294,30 +292,27 @@ export function DaySection({
             )}
             {update.type === "music" && (
               <>
-                <div className="grid place-items-center">
+                <div className="grid place-items-center self-center">
                   <div className="bg-primary rounded-full text-primary-foreground p-1.5">
                     <Music className="h-4 w-4" />
                   </div>
                 </div>
-                <div className="flex flex-col justify-center group relative">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="md:absolute md:right-0 md:top-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={(e) => handleEditClick(update, e)}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <a
+                <div className="flex flex-col justify-center group relative text-sm self-center">
+                  <div className="flex items-center"><a
                     href={
                       "https://song.link/" + encodeURIComponent(update.link)
                     }
                     target="_blank"
-                    className="hover:underline"
+                    className="hover:underline pr-2"
                     rel="noreferrer"
+                  >{update.name}</a><Button
+                    variant="ghost"
+                    size="icon"
+                    className="inline-block md:absolute md:right-0 md:top-0 md:opacity-0 group-hover:opacity-100 transition-opacity "
+                    onClick={(e) => handleEditClick(update, e)}
                   >
-                    <p>{update.name}</p>
-                  </a>
+                      <Pencil className="h-4 w-4" />
+                    </Button></div>
                 </div>
               </>
             )}
